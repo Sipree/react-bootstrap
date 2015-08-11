@@ -100,6 +100,7 @@ class InputBase extends React.Component {
       switch (this.props.bsStyle) {
         case 'success': return <Glyphicon formControlFeedback glyph="ok" key="icon" />;
         case 'warning': return <Glyphicon formControlFeedback glyph="warning-sign" key="icon" />;
+        case 'search': return <Glyphicon formControlFeedback glyph="search" key="icon"/>;
         case 'error': return <Glyphicon formControlFeedback glyph="remove" key="icon" />;
         default: return <span className="form-control-feedback" key="icon" />;
       }

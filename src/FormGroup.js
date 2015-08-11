@@ -36,7 +36,7 @@ FormGroup.propTypes = {
     return React.PropTypes.oneOf(['small', 'medium', 'large'])
       .apply(null, arguments);
   },
-  bsStyle: React.PropTypes.oneOf(['success', 'warning', 'error']),
+  bsStyle: React.PropTypes.oneOf(['success', 'warning', 'error', 'search']),
   groupClassName: React.PropTypes.string
 };
 

@@ -8,6 +8,7 @@ const MenuItem = React.createClass({
     divider:   React.PropTypes.bool,
     href:      React.PropTypes.string,
     title:     React.PropTypes.string,
+    prevDefault: React.PropTypes.string,
     target:    React.PropTypes.string,
     onSelect:  React.PropTypes.func,
     eventKey:  React.PropTypes.any,
@@ -27,8 +28,10 @@ const MenuItem = React.createClass({
       return;
     }
     if (this.props.onSelect) {
-      e.preventDefault();
-      this.props.onSelect(this.props.eventKey, this.props.href, this.props.target);
+      if (!this.props.hasOwnProperty('prevDefault')) {
+        e.preventDefault();
+        this.props.onSelect(this.props.eventKey, this.props.href, this.props.target);
+      }
     }
   },
 
