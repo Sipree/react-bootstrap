@@ -2538,6 +2538,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _react2['default'].findDOMNode(this.refs.input);
 	  };
 
+	  InputBase.prototype.updateValue = function updateValue(props) {
+	    if (props.hasOwnProperty("isParentControlled") && props.isParentControlled && props.type === "text") {
+	      if (props.hasOwnProperty("defaultValue")) {
+	        if (this.getInputDOMNode() != null) {
+	          this.getInputDOMNode().value = props.defaultValue;
+	        }
+	        this.setState({ value: props.defaultValue });
+	      }
+	    }
+	  };
+
+	  InputBase.prototype.componentWillMount = function componentWillMount() {
+	    this.updateValue(this.props);
+	  };
+
+	  InputBase.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+	    this.updateValue(nextProps);
+	  };
+
 	  InputBase.prototype.getValue = function getValue() {
 	    if (this.props.type === 'static') {
 	      return this.props.value;
@@ -2737,6 +2756,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  type: _react2['default'].PropTypes.string,
 	  label: _react2['default'].PropTypes.node,
 	  help: _react2['default'].PropTypes.node,
+	  isParentControlled: _react2['default'].PropTypes.bool,
 	  addonBefore: _react2['default'].PropTypes.node,
 	  addonAfter: _react2['default'].PropTypes.node,
 	  buttonBefore: _react2['default'].PropTypes.node,

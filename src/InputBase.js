@@ -7,7 +7,28 @@ class InputBase extends React.Component {
   getInputDOMNode() {
     return React.findDOMNode(this.refs.input);
   }
-
+  
+  updateValue(props) {
+    if(props.hasOwnProperty("isParentControlled")
+      && props.isParentControlled
+      && props.type === "text") {
+      if(props.hasOwnProperty("defaultValue")) {
+        if(this.getInputDOMNode() != null) {
+          this.getInputDOMNode().value = props.defaultValue;
+        }
+        this.setState({value: props.defaultValue});
+      }
+    }
+  }
+  
+  componentWillMount() {
+    this.updateValue(this.props);
+  }
+  
+  componentWillReceiveProps (nextProps) {
+    this.updateValue(nextProps);
+  }
+  
   getValue() {
     if (this.props.type === 'static') {
       return this.props.value;
@@ -212,6 +233,7 @@ InputBase.propTypes = {
   type: React.PropTypes.string,
   label: React.PropTypes.node,
   help: React.PropTypes.node,
+  isParentControlled: React.PropTypes.bool,
   addonBefore: React.PropTypes.node,
   addonAfter: React.PropTypes.node,
   buttonBefore: React.PropTypes.node,
