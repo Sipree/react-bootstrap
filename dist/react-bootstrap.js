@@ -2544,6 +2544,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.getInputDOMNode() != null) {
 	          this.getInputDOMNode().value = props.defaultValue;
 	        }
+	        this.props.value = props.defaultValue;
 	        this.setState({ value: props.defaultValue });
 	      }
 	    }
