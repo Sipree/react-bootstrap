@@ -1001,7 +1001,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    'row': 'row',
 	    'well': 'well'
 	  },
-	  STYLES: ['default', 'primary', 'success', 'info', 'warning', 'danger', 'link', 'inline', 'tabs', 'pills'],
+	  STYLES: ['default', 'primary', 'success', 'info', 'warning', 'danger', 'link', 'inline', 'tabs', 'pills', 'disabled'],
 	  addStyle: function addStyle(name) {
 	    styleMaps.STYLES.push(name);
 	  },

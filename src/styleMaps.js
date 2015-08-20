@@ -31,7 +31,8 @@ const styleMaps = {
     'link',
     'inline',
     'tabs',
-    'pills'
+    'pills',
+    'disabled',
   ],
   addStyle(name) {
     styleMaps.STYLES.push(name);
