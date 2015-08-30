@@ -24,12 +24,15 @@ const ModalDialog = React.createClass({
   getDefaultProps() {
     return {
       bsClass: 'modal',
-      closeButton: true
+      closeButton: true,
+      modalStyle: null
     };
   },
 
   render() {
-    let modalStyle = { display: 'block' };
+
+    let modalStyle =  { display: 'block' };
+
     let bsClass = this.props.bsClass;
     let dialogClasses = this.getBsClassSet();
 
@@ -45,7 +48,7 @@ const ModalDialog = React.createClass({
         style={modalStyle}
         className={classNames(this.props.className, bsClass)}>
         <div className={classNames(this.props.dialogClassName, dialogClasses)}>
-          <div className={`${bsClass}-content`} role='document'>
+          <div style={this.props.modalStyle} className={`${bsClass}-content`} role='document'>
             { this.props.children }
           </div>
         </div>

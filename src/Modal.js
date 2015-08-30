@@ -106,6 +106,11 @@ const Modal = React.createClass({
     keyboard: React.PropTypes.bool,
 
     /**
+     * Use an inline style for ModalDialog
+     */
+    modalStyle: React.PropTypes.object,
+
+    /**
      * Open and close the Modal with a slide and fade animation.
      */
     animation: React.PropTypes.bool,
