@@ -6180,6 +6180,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    keyboard: _react2['default'].PropTypes.bool,
 
 	    /**
+	     * Use an inline style for ModalDialog
+	     */
+	    modalStyle: _react2['default'].PropTypes.object,
+
+	    /**
 	     * Open and close the Modal with a slide and fade animation.
 	     */
 	    animation: _react2['default'].PropTypes.bool,
@@ -6827,12 +6832,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  getDefaultProps: function getDefaultProps() {
 	    return {
 	      bsClass: 'modal',
-	      closeButton: true
+	      closeButton: true,
+	      modalStyle: null
 	    };
 	  },
 
 	  render: function render() {
+
 	    var modalStyle = { display: 'block' };
+
 	    var bsClass = this.props.bsClass;
 	    var dialogClasses = this.getBsClassSet();
 
@@ -6852,7 +6860,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        { className: _classnames2['default'](this.props.dialogClassName, dialogClasses) },
 	        _react2['default'].createElement(
 	          'div',
-	          { className: bsClass + '-content', role: 'document' },
+	          { style: this.props.modalStyle, className: bsClass + '-content', role: 'document' },
 	          this.props.children
 	        )
 	      )
