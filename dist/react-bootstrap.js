@@ -5114,7 +5114,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      'ul',
 	      _extends({}, this.props, {
 	        className: _classnames2['default'](this.props.className, classes),
-	        role: 'menu' }),
+	        role: 'menu',
+	        style: this.props.hasOwnProperty('menuStyle') ? this.props.menuStyle : {}
+	      }),
 	      _utilsValidComponentChildren2['default'].map(this.props.children, this.renderMenuItem)
 	    );
 	  },
