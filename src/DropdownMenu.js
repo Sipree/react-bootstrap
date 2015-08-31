@@ -7,7 +7,8 @@ import ValidComponentChildren from './utils/ValidComponentChildren';
 const DropdownMenu = React.createClass({
   propTypes: {
     pullRight: React.PropTypes.bool,
-    onSelect: React.PropTypes.func
+    onSelect: React.PropTypes.func,
+    menuStyle:  React.PropTypes.object
   },
 
   render() {

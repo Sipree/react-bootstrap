@@ -4858,6 +4858,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  propTypes: {
 	    pullRight: _react2['default'].PropTypes.bool,
+	    menuStyle: _react2['default'].PropTypes.object,
 	    dropup: _react2['default'].PropTypes.bool,
 	    title: _react2['default'].PropTypes.node,
 	    href: _react2['default'].PropTypes.string,
@@ -4897,6 +4898,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        ref: 'menu',
 	        'aria-labelledby': this.props.id,
 	        pullRight: this.props.pullRight,
+	        menuStyle: this.props.menuStyle,
 	        key: 1 },
 	      _utilsValidComponentChildren2['default'].map(this.props.children, this.renderMenuItem)
 	    )]);
@@ -5098,7 +5100,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  propTypes: {
 	    pullRight: _react2['default'].PropTypes.bool,
-	    onSelect: _react2['default'].PropTypes.func
+	    onSelect: _react2['default'].PropTypes.func,
+	    menuStyle: _react2['default'].PropTypes.object
 	  },
 
 	  render: function render() {

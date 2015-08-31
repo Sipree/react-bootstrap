@@ -17,6 +17,7 @@ const DropdownButton = React.createClass({
 
   propTypes: {
     pullRight: React.PropTypes.bool,
+    menuStyle: React.PropTypes.object,
     dropup:    React.PropTypes.bool,
     title:     React.PropTypes.node,
     href:      React.PropTypes.string,
@@ -56,6 +57,7 @@ const DropdownButton = React.createClass({
         ref="menu"
         aria-labelledby={this.props.id}
         pullRight={this.props.pullRight}
+        menuStyle={this.props.menuStyle}
         key={1}>
         {ValidComponentChildren.map(this.props.children, this.renderMenuItem)}
       </DropdownMenu>
