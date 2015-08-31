@@ -21,7 +21,9 @@ const DropdownMenu = React.createClass({
         <ul
           {...this.props}
           className={classNames(this.props.className, classes)}
-          role="menu">
+          role="menu"
+            style={this.props.hasOwnProperty('menuStyle') ? this.props.menuStyle : {}}
+            >
           {ValidComponentChildren.map(this.props.children, this.renderMenuItem)}
         </ul>
       );
