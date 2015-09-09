@@ -19,6 +19,7 @@ const DropdownButton = React.createClass({
     pullRight: React.PropTypes.bool,
     menuStyle: React.PropTypes.object,
     dropup:    React.PropTypes.bool,
+    isOpen:    React.PropTypes.bool,
     title:     React.PropTypes.node,
     href:      React.PropTypes.string,
     id:        React.PropTypes.string,
@@ -82,7 +83,7 @@ const DropdownButton = React.createClass({
   renderNavItem(children) {
     let classes = {
         'dropdown': true,
-        'open': this.state.open,
+         'open': this.props.hasOwnProperty('isOpen') ? this.props.isOpen : this.state.open,
         'dropup': this.props.dropup
       };
 
@@ -113,7 +114,7 @@ const DropdownButton = React.createClass({
   handleDropdownClick(e) {
     e.preventDefault();
 
-    this.setDropdownState(!this.state.open);
+    this.setDropdownState(this.props.hasOwnProperty('isOpen') ? !this.props.isOpen : !this.state.open);
   },
 
   handleOptionSelect(key) {

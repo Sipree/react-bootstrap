@@ -4860,6 +4860,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    pullRight: _react2['default'].PropTypes.bool,
 	    menuStyle: _react2['default'].PropTypes.object,
 	    dropup: _react2['default'].PropTypes.bool,
+	    isOpen: _react2['default'].PropTypes.bool,
 	    title: _react2['default'].PropTypes.node,
 	    href: _react2['default'].PropTypes.string,
 	    id: _react2['default'].PropTypes.string,
@@ -4922,7 +4923,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  renderNavItem: function renderNavItem(children) {
 	    var classes = {
 	      'dropdown': true,
-	      'open': this.state.open,
+	      'open': this.props.hasOwnProperty('isOpen') ? this.props.isOpen : this.state.open,
 	      'dropup': this.props.dropup
 	    };
 
@@ -4949,7 +4950,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  handleDropdownClick: function handleDropdownClick(e) {
 	    e.preventDefault();
 
-	    this.setDropdownState(!this.state.open);
+	    this.setDropdownState(this.props.hasOwnProperty('isOpen') ? !this.props.isOpen : !this.state.open);
 	  },
 
 	  handleOptionSelect: function handleOptionSelect(key) {
