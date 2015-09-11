@@ -4881,11 +4881,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  render: function render() {
 	    var renderMethod = this.props.navItem ? 'renderNavItem' : 'renderButtonGroup';
 
-	    var caret = this.props.noCaret ? null : this.props.isChevron ? _react2['default'].createElement(
-	      'span',
-	      { className: 'chevron ss-navigatedown' },
-	      ''
-	    ) : _react2['default'].createElement('span', { className: 'caret' });
+	    var caret = this.props.noCaret ? null : this.props.isChevron ? _react2['default'].createElement('span', { className: 'chevron', 'data-icon': '>', 'aria-hidden': 'true' }) : _react2['default'].createElement('span', { className: 'caret' });
 
 	    return this[renderMethod]([_react2['default'].createElement(
 	      _Button2['default'],
