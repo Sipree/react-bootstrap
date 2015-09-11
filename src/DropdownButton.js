@@ -8,6 +8,7 @@ import createChainedFunction from './utils/createChainedFunction';
 import BootstrapMixin from './BootstrapMixin';
 import DropdownStateMixin from './DropdownStateMixin';
 import Button from './Button';
+import Glyphion from './Glyphicon';
 import ButtonGroup from './ButtonGroup';
 import DropdownMenu from './DropdownMenu';
 import ValidComponentChildren from './utils/ValidComponentChildren';
@@ -24,6 +25,7 @@ const DropdownButton = React.createClass({
     href:      React.PropTypes.string,
     id:        React.PropTypes.string,
     onClick:   React.PropTypes.func,
+    isChevron: React.PropTypes.func,
     onSelect:  React.PropTypes.func,
     navItem:   React.PropTypes.bool,
     noCaret:   React.PropTypes.bool,
@@ -37,7 +39,9 @@ const DropdownButton = React.createClass({
       'renderNavItem' : 'renderButtonGroup';
 
     let caret = this.props.noCaret ?
-        null : (<span className="caret" />);
+        null : this.props.isChevron ? (<span className="chevron ss-navigatedown">&#xF501;</span>) : (<span className="caret" />);
+
+
 
     return this[renderMethod]([
       <Button

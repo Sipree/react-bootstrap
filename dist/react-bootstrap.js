@@ -4839,6 +4839,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Button2 = _interopRequireDefault(_Button);
 
+	var _Glyphicon = __webpack_require__(52);
+
+	var _Glyphicon2 = _interopRequireDefault(_Glyphicon);
+
 	var _ButtonGroup = __webpack_require__(54);
 
 	var _ButtonGroup2 = _interopRequireDefault(_ButtonGroup);
@@ -4865,6 +4869,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    href: _react2['default'].PropTypes.string,
 	    id: _react2['default'].PropTypes.string,
 	    onClick: _react2['default'].PropTypes.func,
+	    isChevron: _react2['default'].PropTypes.func,
 	    onSelect: _react2['default'].PropTypes.func,
 	    navItem: _react2['default'].PropTypes.bool,
 	    noCaret: _react2['default'].PropTypes.bool,
@@ -4876,7 +4881,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  render: function render() {
 	    var renderMethod = this.props.navItem ? 'renderNavItem' : 'renderButtonGroup';
 
-	    var caret = this.props.noCaret ? null : _react2['default'].createElement('span', { className: 'caret' });
+	    var caret = this.props.noCaret ? null : this.props.isChevron ? _react2['default'].createElement(
+	      'span',
+	      { className: 'chevron ss-navigatedown' },
+	      ''
+	    ) : _react2['default'].createElement('span', { className: 'caret' });
 
 	    return this[renderMethod]([_react2['default'].createElement(
 	      _Button2['default'],
