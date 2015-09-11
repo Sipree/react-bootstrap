@@ -4869,7 +4869,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    href: _react2['default'].PropTypes.string,
 	    id: _react2['default'].PropTypes.string,
 	    onClick: _react2['default'].PropTypes.func,
-	    isChevron: _react2['default'].PropTypes.func,
+	    isChevron: _react2['default'].PropTypes.bool,
 	    onSelect: _react2['default'].PropTypes.func,
 	    navItem: _react2['default'].PropTypes.bool,
 	    noCaret: _react2['default'].PropTypes.bool,

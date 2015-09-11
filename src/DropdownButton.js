@@ -25,7 +25,7 @@ const DropdownButton = React.createClass({
     href:      React.PropTypes.string,
     id:        React.PropTypes.string,
     onClick:   React.PropTypes.func,
-    isChevron: React.PropTypes.func,
+    isChevron: React.PropTypes.bool,
     onSelect:  React.PropTypes.func,
     navItem:   React.PropTypes.bool,
     noCaret:   React.PropTypes.bool,
