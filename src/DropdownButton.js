@@ -39,7 +39,7 @@ const DropdownButton = React.createClass({
       'renderNavItem' : 'renderButtonGroup';
 
     let caret = this.props.noCaret ?
-        null : this.props.isChevron ? (<span className="chevron" data-icon=">&#xF501;" aria-hidden="true"/>) : (<span className="caret" />);
+        null : this.props.isChevron ? (<span className="chevron">&#xF501;</span>) : (<span className="caret" />);
 
 
 
