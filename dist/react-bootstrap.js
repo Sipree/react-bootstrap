@@ -4869,7 +4869,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    href: _react2['default'].PropTypes.string,
 	    id: _react2['default'].PropTypes.string,
 	    onClick: _react2['default'].PropTypes.func,
-	    isChevron: _react2['default'].PropTypes.bool,
+	    chevronSrc: _react2['default'].PropTypes.string,
 	    onSelect: _react2['default'].PropTypes.func,
 	    navItem: _react2['default'].PropTypes.bool,
 	    noCaret: _react2['default'].PropTypes.bool,
@@ -4881,11 +4881,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  render: function render() {
 	    var renderMethod = this.props.navItem ? 'renderNavItem' : 'renderButtonGroup';
 
-	    var caret = this.props.noCaret ? null : this.props.isChevron ? _react2['default'].createElement(
-	      'span',
-	      { className: 'chevron' },
-	      ''
-	    ) : _react2['default'].createElement('span', { className: 'caret' });
+	    var caret = this.props.noCaret ? null : this.props.hasOwnProperty("chevronSrc") ? _react2['default'].createElement('img', { src: this.props.chevronSrc, className: 'chevron' }) : _react2['default'].createElement('span', { className: 'caret' });
 
 	    return this[renderMethod]([_react2['default'].createElement(
 	      _Button2['default'],

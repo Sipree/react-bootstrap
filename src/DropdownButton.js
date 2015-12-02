@@ -25,7 +25,7 @@ const DropdownButton = React.createClass({
     href:      React.PropTypes.string,
     id:        React.PropTypes.string,
     onClick:   React.PropTypes.func,
-    isChevron: React.PropTypes.bool,
+    chevronSrc: React.PropTypes.string,
     onSelect:  React.PropTypes.func,
     navItem:   React.PropTypes.bool,
     noCaret:   React.PropTypes.bool,
@@ -39,7 +39,7 @@ const DropdownButton = React.createClass({
       'renderNavItem' : 'renderButtonGroup';
 
     let caret = this.props.noCaret ?
-        null : this.props.isChevron ? (<span className="chevron">&#xF501;</span>) : (<span className="caret" />);
+        null : this.props.hasOwnProperty("chevronSrc") ? (<img src={this.props.chevronSrc} className="chevron"/>) : (<span className="caret" />);
 
 
 
