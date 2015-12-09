@@ -1,20 +1,20 @@
 import 'es5-shim';
 
-beforeEach(function() {
-  sinon.stub(console, 'warn');
+beforeEach(() => {
+  sinon.stub(console, 'error');
 });
 
-afterEach(function() {
-  if (typeof console.warn.restore === 'function') {
-    assert(!console.warn.called, () => {
-      return `${console.warn.getCall(0).args[0]} \nIn '${this.currentTest.fullTitle()}'`;
+afterEach(function checkNoUnexpectedWarnings() {
+  if (typeof console.error.restore === 'function') {
+    assert(!console.error.called, () => {
+      return `${console.error.getCall(0).args[0]} \nIn '${this.currentTest.fullTitle()}'`;
     });
-    console.warn.restore();
+    console.error.restore();
   }
 });
 
-describe('Process environment for tests', function () {
-  it('Should be development for React console warnings', function () {
+describe('Process environment for tests', () => {
+  it('Should be development for React console warnings', () => {
     assert.equal(process.env.NODE_ENV, 'development');
   });
 });

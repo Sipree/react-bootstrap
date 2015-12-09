@@ -1,10 +1,9 @@
 import React from 'react';
 import classSet from 'classnames';
-import BootstrapMixin from './BootstrapMixin';
 import SafeAnchor from './SafeAnchor';
+import bootstrapUtils, { bsClass } from './utils/bootstrapUtils';
 
 const Thumbnail = React.createClass({
-  mixins: [BootstrapMixin],
 
   propTypes: {
     alt: React.PropTypes.string,
@@ -12,42 +11,34 @@ const Thumbnail = React.createClass({
     src: React.PropTypes.string
   },
 
-  getDefaultProps() {
-    return {
-      bsClass: 'thumbnail'
-    };
-  },
-
   render() {
-    let classes = this.getBsClassSet();
+    let classes = bootstrapUtils.getClassSet(this.props);
 
-    if(this.props.href) {
+    if (this.props.href) {
       return (
         <SafeAnchor {...this.props} href={this.props.href} className={classSet(this.props.className, classes)}>
           <img src={this.props.src} alt={this.props.alt} />
         </SafeAnchor>
       );
     }
-    else {
-      if(this.props.children) {
-        return (
-          <div {...this.props} className={classSet(this.props.className, classes)}>
-            <img src={this.props.src} alt={this.props.alt} />
-            <div className="caption">
-              {this.props.children}
-            </div>
+
+    if (this.props.children) {
+      return (
+        <div {...this.props} className={classSet(this.props.className, classes)}>
+          <img src={this.props.src} alt={this.props.alt} />
+          <div className="caption">
+            {this.props.children}
           </div>
-        );
-      }
-      else {
-        return (
-          <div {...this.props} className={classSet(this.props.className, classes)}>
-            <img src={this.props.src} alt={this.props.alt} />
-          </div>
-        );
-      }
+        </div>
+      );
     }
+
+    return (
+      <div {...this.props} className={classSet(this.props.className, classes)}>
+        <img src={this.props.src} alt={this.props.alt} />
+      </div>
+    );
   }
 });
 
-export default Thumbnail;
+export default bsClass('thumbnail', Thumbnail);

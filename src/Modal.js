@@ -1,12 +1,17 @@
-/*eslint-disable react/prop-types */
-import React, { cloneElement } from 'react';
-import classNames from 'classnames';
-import domUtils from './utils/domUtils';
-import EventListener from './utils/EventListener';
-import createChainedFunction from './utils/createChainedFunction';
-import CustomPropTypes from './utils/CustomPropTypes';
 
-import Portal from './Portal';
+/* eslint-disable react/prop-types */
+import classNames from 'classnames';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import tbsUtils, { bsClass, bsSizes } from './utils/bootstrapUtils';
+import { Sizes } from './styleMaps';
+
+import getScrollbarSize from 'dom-helpers/util/scrollbarSize';
+import canUseDOM from 'dom-helpers/util/inDOM';
+import ownerDocument from 'dom-helpers/ownerDocument';
+import events from 'dom-helpers/events';
+import elementType from 'react-prop-types/lib/elementType';
+
 import Fade from './Fade';
 import ModalDialog from './ModalDialog';
 import Body from './ModalBody';
@@ -14,85 +19,14 @@ import Header from './ModalHeader';
 import Title from './ModalTitle';
 import Footer from './ModalFooter';
 
-/**
- * Gets the correct clientHeight of the modal container
- * when the body/window/document you need to use the docElement clientHeight
- * @param  {HTMLElement} container
- * @param  {ReactElement|HTMLElement} context
- * @return {Number}
- */
-function containerClientHeight(container, context) {
-  let doc = domUtils.ownerDocument(context);
-
-  return (container === doc.body || container === doc.documentElement)
-      ? doc.documentElement.clientHeight
-      : container.clientHeight;
-}
-
-function getContainer(context) {
-  return (context.props.container && React.findDOMNode(context.props.container)) ||
-    domUtils.ownerDocument(context).body;
-}
-
-let currentFocusListener;
-
-/**
- * Firefox doesn't have a focusin event so using capture is easiest way to get bubbling
- * IE8 can't do addEventListener, but does have onfocusin, so we use that in ie8
- *
- * We only allow one Listener at a time to avoid stack overflows
- *
- * @param  {ReactElement|HTMLElement} context
- * @param  {Function} handler
- */
-function onFocus(context, handler) {
-  let doc = domUtils.ownerDocument(context);
-  let useFocusin = !doc.addEventListener;
-  let remove;
-
-  if (currentFocusListener) {
-    currentFocusListener.remove();
-  }
-
-  if (useFocusin) {
-    document.attachEvent('onfocusin', handler);
-    remove = () => document.detachEvent('onfocusin', handler);
-  } else {
-    document.addEventListener('focus', handler, true);
-    remove = () => document.removeEventListener('focus', handler, true);
-  }
-
-  currentFocusListener = { remove };
-
-  return currentFocusListener;
-}
-
-let scrollbarSize;
-
-function getScrollbarSize() {
-  if (scrollbarSize !== undefined) {
-    return scrollbarSize;
-  }
-
-  let scrollDiv = document.createElement('div');
-
-  scrollDiv.style.position = 'absolute';
-  scrollDiv.style.top = '-9999px';
-  scrollDiv.style.width = '50px';
-  scrollDiv.style.height = '50px';
-  scrollDiv.style.overflow = 'scroll';
-
-  document.body.appendChild(scrollDiv);
-  scrollbarSize = scrollDiv.offsetWidth - scrollDiv.clientWidth;
-  document.body.removeChild(scrollDiv);
-
-  scrollDiv = null;
-  return scrollbarSize;
-}
+import BaseModal from 'react-overlays/lib/Modal';
+import isOverflowing from 'react-overlays/lib/utils/isOverflowing';
+import pick from 'lodash-compat/object/pick';
 
 const Modal = React.createClass({
+
   propTypes: {
-    ...Portal.propTypes,
+    ...BaseModal.propTypes,
     ...ModalDialog.propTypes,
 
     /**
@@ -119,7 +53,7 @@ const Modal = React.createClass({
      * A Component type that provides the modal content Markup. This is a useful prop when you want to use your own
      * styles and markup to create a custom modal component.
      */
-    dialogComponent: CustomPropTypes.elementType,
+    dialogComponent: elementType,
 
     /**
      * When `true` The modal will automatically shift focus to itself when it opens, and replace it to the last focused element when it closes.
@@ -132,237 +66,126 @@ const Modal = React.createClass({
      * Consider leaving the default value here, as it is necessary to make the Modal work well with assistive technologies,
      * such as screen readers.
      */
-    enforceFocus: React.PropTypes.bool
+    enforceFocus: React.PropTypes.bool,
+
+    /**
+     * Hide this from automatic props documentation generation.
+     * @private
+     */
+    bsStyle: React.PropTypes.string,
+
+    /**
+     * When `true` The modal will show itself.
+     */
+    show: React.PropTypes.bool,
+
+    /**
+     * A callback fired when the header closeButton or non-static backdrop is
+     * clicked. Required if either are specified.
+     */
+    onHide: React.PropTypes.func
+  },
+
+  childContextTypes: {
+    '$bs_onModalHide': React.PropTypes.func
   },
 
   getDefaultProps() {
     return {
+      ...BaseModal.defaultProps,
       bsClass: 'modal',
-      dialogComponent: ModalDialog,
-      show: false,
       animation: true,
-      backdrop: true,
-      keyboard: true,
-      autoFocus: true,
-      enforceFocus: true
+      dialogComponent: ModalDialog,
     };
   },
 
   getInitialState() {
     return {
-      exited: !this.props.show
+      modalStyles: {}
+    };
+  },
+
+  getChildContext() {
+    return {
+      $bs_onModalHide: this.props.onHide
     };
   },
 
   render() {
-    let { children, animation, backdrop, ...props } = this.props;
-    let { onExit, onExiting, onEnter, onEntering, onEntered } = props;
+    let {
+        className
+      , children
+      , dialogClassName
+      , animation
+      , ...props } = this.props;
 
-    let show = !!props.show;
+    let { modalStyles } = this.state;
+
+    let inClass = { in: props.show && !animation };
     let Dialog = props.dialogComponent;
 
-    const mountModal = show || (animation && !this.state.exited);
-    if (!mountModal) {
-      return null;
-    }
+    let parentProps = pick(props,
+      Object.keys(BaseModal.propTypes).concat(
+        ['onExit', 'onExiting', 'onEnter', 'onEntered']) // the rest are fired in _onHide() and _onShow()
+    );
 
     let modal = (
       <Dialog
+        key="modal"
+        ref={ref => this._modal = ref}
         {...props}
-        ref={this._setDialogRef}
-        className={classNames(this.props.className, { in: show && !animation })}
-        onClick={backdrop === true ? this.handleBackdropClick : null}>
-        { this.renderContent() }
+        style={modalStyles}
+        className={classNames(className, inClass)}
+        dialogClassName={dialogClassName}
+        onClick={props.backdrop === true ? this.handleDialogClick : null}
+      >
+        { this.props.children }
       </Dialog>
     );
 
-    if (animation) {
-      modal = (
-        <Fade
-          transitionAppear
-          unmountOnExit
-          in={show}
-          duration={Modal.TRANSITION_DURATION}
-          onExit={onExit}
-          onExiting={onExiting}
-          onExited={this.handleHidden}
-          onEnter={onEnter}
-          onEntering={onEntering}
-          onEntered={onEntered}>
-          { modal }
-        </Fade>
-      );
-    }
-
-    if (backdrop) {
-      modal = this.renderBackdrop(modal);
-    }
-
     return (
-      <Portal container={props.container}>
+      <BaseModal
+        {...parentProps}
+        show={props.show}
+        ref={ref => {
+          this._wrapper = (ref && ref.refs.modal);
+          this._backdrop = (ref && ref.refs.backdrop);
+        }}
+        onEntering={this._onShow}
+        onExited={this._onHide}
+        backdropClassName={classNames(tbsUtils.prefix(props, 'backdrop'), inClass)}
+        containerClassName={tbsUtils.prefix(props, 'open')}
+        transition={animation ? Fade : undefined}
+        dialogTransitionTimeout={Modal.TRANSITION_DURATION}
+        backdropTransitionTimeout={Modal.BACKDROP_TRANSITION_DURATION}
+      >
         { modal }
-      </Portal>
+      </BaseModal>
     );
   },
 
-  renderContent() {
-    return React.Children.map(this.props.children, child => {
-      // TODO: use context in 0.14
-      if (child && child.type && child.type.__isModalHeader) {
-        return cloneElement(child, {
-          onHide: createChainedFunction(this.props.onHide, child.props.onHide)
-        });
-      }
-      return child;
-    });
-  },
 
-  renderBackdrop(modal) {
-    let { animation, bsClass } = this.props;
-    let duration = Modal.BACKDROP_TRANSITION_DURATION;
+  _onShow(...args) {
+    events.on(window, 'resize', this.handleWindowResize);
 
-    // Don't handle clicks for "static" backdrops
-    let onClick = this.props.backdrop === true ?
-      this.handleBackdropClick : null;
-
-    let backdrop = (
-      <div
-        ref="backdrop"
-        className={classNames(`${bsClass}-backdrop`, { in: this.props.show && !animation })}
-        onClick={onClick}/>
+    this.setState(
+      this._getStyles()
     );
 
-    return (
-      <div
-        ref='modal'>
-        { animation
-            ? <Fade transitionAppear in={this.props.show} duration={duration}>{backdrop}</Fade>
-            : backdrop
-        }
-        {modal}
-      </div>
-    );
-  },
-
-  _setDialogRef(ref) {
-    // issue #1074
-    // due to: https://github.com/facebook/react/blob/v0.13.3/src/core/ReactCompositeComponent.js#L842
-    //
-    // when backdrop is `false` react hasn't had a chance to reassign the refs to a usable object, b/c there are no other
-    // "classic" refs on the component (or they haven't been processed yet)
-    // TODO: Remove the need for this in next breaking release
-    if (Object.isFrozen(this.refs) && !Object.keys(this.refs).length) {
-      this.refs = {};
-    }
-
-    this.refs.dialog = ref;
-
-    //maintains backwards compat with older component breakdown
-    if (!this.props.backdrop) {
-      this.refs.modal = ref;
+    if (this.props.onEntering) {
+      this.props.onEntering(...args);
     }
   },
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.show) {
-      this.setState({exited: false});
-    } else if (!nextProps.animation) {
-      // Otherwise let handleHidden take care of marking exited.
-      this.setState({exited: true});
-    }
-  },
-
-  componentWillUpdate(nextProps) {
-    if (nextProps.show) {
-      this.checkForFocus();
-    }
-  },
-
-  componentDidMount() {
-    if (this.props.show) {
-      this.onShow();
-    }
-  },
-
-  componentDidUpdate(prevProps) {
-    let { animation } = this.props;
-
-    if (prevProps.show && !this.props.show && !animation) {
-      //otherwise handleHidden will call this.
-      this.onHide();
-    } else if (!prevProps.show && this.props.show) {
-      this.onShow();
-    }
-  },
-
-  componentWillUnmount() {
-    if (this.props.show) {
-      this.onHide();
-    }
-  },
-
-  onShow() {
-    const doc = domUtils.ownerDocument(this);
-    const win = domUtils.ownerWindow(this);
-
-    this._onDocumentKeyupListener =
-      EventListener.listen(doc, 'keyup', this.handleDocumentKeyUp);
-
-    this._onWindowResizeListener =
-      EventListener.listen(win, 'resize', this.handleWindowResize);
-
-    if (this.props.enforceFocus) {
-      this._onFocusinListener = onFocus(this, this.enforceFocus);
-    }
-
-    let container = getContainer(this);
-
-    container.className += container.className.length ? ' modal-open' : 'modal-open';
-
-    this._containerIsOverflowing = container.scrollHeight > containerClientHeight(container, this);
-
-    this._originalPadding = container.style.paddingRight;
-
-    if (this._containerIsOverflowing) {
-      container.style.paddingRight = parseInt(this._originalPadding || 0, 10) + getScrollbarSize() + 'px';
-    }
-
-    if (this.props.backdrop) {
-      this.iosClickHack();
-    }
-
-    this.setState(this._getStyles() //eslint-disable-line react/no-did-mount-set-state
-      , () => this.focusModalContent());
-  },
-
-  onHide() {
-    this._onDocumentKeyupListener.remove();
-    this._onWindowResizeListener.remove();
-
-    if (this._onFocusinListener) {
-      this._onFocusinListener.remove();
-    }
-
-    let container = getContainer(this);
-
-    container.style.paddingRight = this._originalPadding;
-
-    container.className = container.className.replace(/ ?modal-open/, '');
-
-    this.restoreLastFocus();
-  },
-
-  handleHidden(...args) {
-    this.setState({ exited: true });
-
-    this.onHide();
+  _onHide(...args) {
+    events.off(window, 'resize', this.handleWindowResize);
 
     if (this.props.onExited) {
       this.props.onExited(...args);
     }
   },
 
-  handleBackdropClick(e) {
+  handleDialogClick(e) {
     if (e.target !== e.currentTarget) {
       return;
     }
@@ -370,83 +193,29 @@ const Modal = React.createClass({
     this.props.onHide();
   },
 
-  handleDocumentKeyUp(e) {
-    if (this.props.keyboard && e.keyCode === 27) {
-      this.props.onHide();
-    }
-  },
-
   handleWindowResize() {
     this.setState(this._getStyles());
   },
 
-  checkForFocus() {
-    if (domUtils.canUseDom) {
-      try {
-        this.lastFocus = document.activeElement;
-      }
-      catch (e) {} // eslint-disable-line no-empty
-    }
-  },
-
-  focusModalContent() {
-    let modalContent = React.findDOMNode(this.refs.dialog);
-    let current = domUtils.activeElement(this);
-    let focusInModal = current && domUtils.contains(modalContent, current);
-
-    if (modalContent && this.props.autoFocus && !focusInModal) {
-      this.lastFocus = current;
-      modalContent.focus();
-    }
-  },
-
-  restoreLastFocus() {
-    if (this.lastFocus && this.lastFocus.focus) {
-      this.lastFocus.focus();
-      this.lastFocus = null;
-    }
-  },
-
-  enforceFocus() {
-    if (!this.isMounted()) {
-      return;
-    }
-
-    let active = domUtils.activeElement(this);
-    let modal = React.findDOMNode(this.refs.dialog);
-
-    if (modal && modal !== active && !domUtils.contains(modal, active)) {
-      modal.focus();
-    }
-  },
-
-  iosClickHack() {
-    // IOS only allows click events to be delegated to the document on elements
-    // it considers 'clickable' - anchors, buttons, etc. We fake a click handler on the
-    // DOM nodes themselves. Remove if handled by React: https://github.com/facebook/react/issues/1169
-    React.findDOMNode(this.refs.modal).onclick = function () {};
-    React.findDOMNode(this.refs.backdrop).onclick = function () {};
-  },
-
   _getStyles() {
-    if (!domUtils.canUseDom) {
+    if (!canUseDOM) {
       return {};
     }
 
-    let node = React.findDOMNode(this.refs.modal);
+    let node = ReactDOM.findDOMNode(this._modal);
+    let doc = ownerDocument(node);
+
     let scrollHt = node.scrollHeight;
-    let container = getContainer(this);
-    let containerIsOverflowing = this._containerIsOverflowing;
-    let modalIsOverflowing = scrollHt > containerClientHeight(container, this);
+    let bodyIsOverflowing = isOverflowing(ReactDOM.findDOMNode(this.props.container || doc.body));
+    let modalIsOverflowing = scrollHt > doc.documentElement.clientHeight;
 
     return {
-      dialogStyles: {
-        paddingRight: containerIsOverflowing && !modalIsOverflowing ? getScrollbarSize() : void 0,
-        paddingLeft:  !containerIsOverflowing && modalIsOverflowing ? getScrollbarSize() : void 0
+      modalStyles: {
+        paddingRight: bodyIsOverflowing && !modalIsOverflowing ? getScrollbarSize() : void 0,
+        paddingLeft: !bodyIsOverflowing && modalIsOverflowing ? getScrollbarSize() : void 0
       }
     };
   }
-
 });
 
 Modal.Body = Body;
@@ -459,4 +228,6 @@ Modal.Dialog = ModalDialog;
 Modal.TRANSITION_DURATION = 300;
 Modal.BACKDROP_TRANSITION_DURATION = 150;
 
-export default Modal;
+export default bsSizes([Sizes.LARGE, Sizes.SMALL],
+  bsClass('modal', Modal)
+);

@@ -1,40 +1,45 @@
 import React from 'react';
 import classNames from 'classnames';
-import BootstrapMixin from './BootstrapMixin';
-import CustomPropTypes from './utils/CustomPropTypes';
+import bootstrapUtils, { bsClass } from './utils/bootstrapUtils';
+import all from 'react-prop-types/lib/all';
+import Button from './Button';
 
 const ButtonGroup = React.createClass({
-  mixins: [BootstrapMixin],
 
   propTypes: {
-    vertical:  React.PropTypes.bool,
+    vertical: React.PropTypes.bool,
     justified: React.PropTypes.bool,
     /**
      * Display block buttons, only useful when used with the "vertical" prop.
      * @type {bool}
      */
-    block: CustomPropTypes.all([
+    block: all(
       React.PropTypes.bool,
-      function(props, propName, componentName) {
+      props => {
         if (props.block && !props.vertical) {
           return new Error('The block property requires the vertical property to be set to have any effect');
         }
       }
-    ])
+    )
   },
 
   getDefaultProps() {
     return {
-      bsClass: 'button-group'
+      block: false,
+      justified: false,
+      vertical: false
     };
   },
 
   render() {
-    let classes = this.getBsClassSet();
-    classes['btn-group'] = !this.props.vertical;
-    classes['btn-group-vertical'] = this.props.vertical;
-    classes['btn-group-justified'] = this.props.justified;
-    classes['btn-block'] = this.props.block;
+    let classes = bootstrapUtils.getClassSet(this.props);
+
+    classes[bootstrapUtils.prefix(this.props)] = !this.props.vertical;
+    classes[bootstrapUtils.prefix(this.props, 'vertical')] = this.props.vertical;
+    classes[bootstrapUtils.prefix(this.props, 'justified')] = this.props.justified;
+
+    // this is annoying, since the class is `btn-block` not `btn-group-block`
+    classes[bootstrapUtils.prefix(Button.defaultProps, 'block')] = this.props.block;
 
     return (
       <div
@@ -46,4 +51,4 @@ const ButtonGroup = React.createClass({
   }
 });
 
-export default ButtonGroup;
+export default bsClass('btn-group', ButtonGroup);

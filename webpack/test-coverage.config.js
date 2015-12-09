@@ -1,12 +1,11 @@
-import _ from 'lodash';
+import _ from 'lodash-compat';
 import path from 'path';
 import { jsLoader } from './base.config';
 import testConfig from './test.config';
 
 const paths = {
   SRC: path.resolve('src'),
-  TEST: path.resolve('test'),
-  TOOLS: path.resolve('tools') // for tools/public-components.js
+  TEST: path.resolve('test')
 };
 
 export default _.extend({}, testConfig, {
@@ -14,7 +13,7 @@ export default _.extend({}, testConfig, {
     loaders: [
       {
         test: /\.js/,
-        include: [paths.SRC, paths.TEST, paths.TOOLS],
+        include: [paths.SRC, paths.TEST],
         loader: jsLoader,
         exclude: /node_modules/
       }

@@ -1,11 +1,12 @@
-import React from 'react';
 import classNames from 'classnames';
+import React from 'react';
+
 import FormGroup from './FormGroup';
 import Glyphicon from './Glyphicon';
 
 class InputBase extends React.Component {
   getInputDOMNode() {
-    return React.findDOMNode(this.refs.input);
+    return this.refs.input;
   }
   
   updateValue(props) {
@@ -36,12 +37,10 @@ class InputBase extends React.Component {
     } else if (this.props.type) {
       if (this.props.type === 'select' && this.props.multiple) {
         return this.getSelectedOptions();
-      } else {
-        return this.getInputDOMNode().value;
       }
-    } else {
-      throw 'Cannot use getValue without specifying input type.';
+      return this.getInputDOMNode().value;
     }
+    throw new Error('Cannot use getValue without specifying input type.');
   }
 
   getChecked() {
@@ -98,8 +97,9 @@ class InputBase extends React.Component {
 
     let inputGroupClassName;
     switch (this.props.bsSize) {
-      case 'small': inputGroupClassName = 'input-group-sm'; break;
-      case 'large': inputGroupClassName = 'input-group-lg'; break;
+    case 'small': inputGroupClassName = 'input-group-sm'; break;
+    case 'large': inputGroupClassName = 'input-group-lg'; break;
+    default:
     }
 
     return addonBefore || addonAfter || buttonBefore || buttonAfter ? (
@@ -180,24 +180,24 @@ class InputBase extends React.Component {
     }
 
     switch (this.props.type) {
-      case 'select':
-        return (
-          <select {...this.props} className={classNames(this.props.className, 'form-control')} ref="input" key="input">
-            {this.props.children}
-          </select>
-        );
-      case 'textarea':
-        return <textarea {...this.props} className={classNames(this.props.className, 'form-control')} ref="input" key="input" />;
-      case 'static':
-        return (
-          <p {...this.props} className={classNames(this.props.className, 'form-control-static')} ref="input" key="input">
-            {this.props.value}
-          </p>
-        );
+    case 'select':
+      return (
+        <select {...this.props} className={classNames(this.props.className, 'form-control')} ref="input" key="input">
+          {this.props.children}
+        </select>
+      );
+    case 'textarea':
+      return <textarea {...this.props} className={classNames(this.props.className, 'form-control')} ref="input" key="input" />;
+    case 'static':
+      return (
+        <p {...this.props} className={classNames(this.props.className, 'form-control-static')} ref="input" key="input">
+          {this.props.value}
+        </p>
+      );
+    default:
+      const className = this.isCheckboxOrRadio() || this.isFile() ? '' : 'form-control';
+      return <input {...this.props} className={classNames(this.props.className, className)} ref="input" key="input" />;
     }
-
-    let className = this.isCheckboxOrRadio() || this.isFile() ? '' : 'form-control';
-    return <input {...this.props} className={classNames(this.props.className, className)} ref="input" key="input" />;
   }
 
   renderFormGroup(children) {
@@ -243,13 +243,22 @@ InputBase.propTypes = {
   bsStyle: React.PropTypes.oneOf(['success', 'warning', 'error']),
   hasFeedback: React.PropTypes.bool,
   feedbackIcon: React.PropTypes.node,
-  id: React.PropTypes.string,
+  id: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.number
+  ]),
   groupClassName: React.PropTypes.string,
   wrapperClassName: React.PropTypes.string,
   labelClassName: React.PropTypes.string,
   multiple: React.PropTypes.bool,
   disabled: React.PropTypes.bool,
   value: React.PropTypes.any
+};
+
+InputBase.defaultProps = {
+  disabled: false,
+  hasFeedback: false,
+  multiple: false
 };
 
 export default InputBase;

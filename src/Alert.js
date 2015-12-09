@@ -1,9 +1,9 @@
 import React from 'react';
 import classNames from 'classnames';
-import BootstrapMixin from './BootstrapMixin';
+import bootstrapUtils, { bsStyles, bsClass } from './utils/bootstrapUtils';
+import { State } from './styleMaps';
 
-const Alert = React.createClass({
-  mixins: [BootstrapMixin],
+let Alert = React.createClass({
 
   propTypes: {
     onDismiss: React.PropTypes.func,
@@ -13,8 +13,6 @@ const Alert = React.createClass({
 
   getDefaultProps() {
     return {
-      bsClass: 'alert',
-      bsStyle: 'info',
       closeLabel: 'Close Alert'
     };
   },
@@ -24,23 +22,36 @@ const Alert = React.createClass({
       <button
         type="button"
         className="close"
-        aria-label={this.props.closeLabel}
+        onClick={this.props.onDismiss}
+        aria-hidden="true"
+        tabIndex="-1">
+        <span>&times;</span>
+      </button>
+    );
+  },
+
+  renderSrOnlyDismissButton() {
+    return (
+      <button
+        type="button"
+        className="close sr-only"
         onClick={this.props.onDismiss}>
-        <span aria-hidden="true">&times;</span>
+        {this.props.closeLabel}
       </button>
     );
   },
 
   render() {
-    let classes = this.getBsClassSet();
+    let classes = bootstrapUtils.getClassSet(this.props);
     let isDismissable = !!this.props.onDismiss;
 
-    classes['alert-dismissable'] = isDismissable;
+    classes[bootstrapUtils.prefix(this.props, 'dismissable')] = isDismissable;
 
     return (
-      <div {...this.props} role='alert' className={classNames(this.props.className, classes)}>
+      <div {...this.props} role="alert" className={classNames(this.props.className, classes)}>
         {isDismissable ? this.renderDismissButton() : null}
         {this.props.children}
+        {isDismissable ? this.renderSrOnlyDismissButton() : null}
       </div>
     );
   },
@@ -56,4 +67,7 @@ const Alert = React.createClass({
   }
 });
 
-export default Alert;
+
+export default bsStyles(State.values(), State.INFO,
+  bsClass('alert', Alert)
+);

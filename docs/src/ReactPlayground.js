@@ -4,10 +4,13 @@
 /* eslint-disable */
 const classNames = require('classnames');
 const React = require('react');
+const ReactDOM = require('react-dom');
 
 const Accordion = require('../../src/Accordion');
 const Alert = require('../../src/Alert');
 const Badge = require('../../src/Badge');
+const Breadcrumb = require('../../src/Breadcrumb');
+const BreadcrumbItem = require('../../src/BreadcrumbItem');
 const Button = require('../../src/Button');
 const ButtonGroup = require('../../src/ButtonGroup');
 const ButtonInput = require('../../src/ButtonInput');
@@ -16,14 +19,16 @@ const Carousel = require('../../src/Carousel');
 const CarouselItem = require('../../src/CarouselItem');
 const Col = require('../../src/Col');
 const Collapse = require('../../src/Collapse');
-const CollapsibleMixin = require('../../src/CollapsibleMixin');
 const CollapsibleNav = require('../../src/CollapsibleNav');
+const Dropdown = require('../../src/Dropdown');
 const DropdownButton = require('../../src/DropdownButton');
+const DropdownMenu = require('../../src/DropdownMenu');
 const Fade = require('../../src/Fade');
 const FormControls = require('../../src/FormControls');
 const Glyphicon = require('../../src/Glyphicon');
 const Grid = require('../../src/Grid');
 const Input = require('../../src/Input');
+const Image = require('../../src/Image');
 const Jumbotron = require('../../src/Jumbotron');
 const Label = require('../../src/Label');
 const ListGroup = require('../../src/ListGroup');
@@ -31,8 +36,10 @@ const ListGroupItem = require('../../src/ListGroupItem');
 const MenuItem = require('../../src/MenuItem');
 const Modal = require('../../src/Modal');
 const Nav = require('../../src/Nav');
+const NavbarBrand = require('../../src/NavbarBrand');
 const Navbar = require('../../src/Navbar');
 const NavItem = require('../../src/NavItem');
+const NavDropdown = require('../../src/NavDropdown');
 const Overlay = require('../../src/Overlay');
 const OverlayTrigger = require('../../src/OverlayTrigger');
 const PageHeader = require('../../src/PageHeader');
@@ -42,13 +49,13 @@ const Pagination = require('../../src/Pagination');
 const Panel = require('../../src/Panel');
 const PanelGroup = require('../../src/PanelGroup');
 const Popover = require('../../src/Popover');
-const Portal = require('../../src/Portal');
 const ProgressBar = require('../../src/ProgressBar');
+const ResponsiveEmbed = require('../../src/ResponsiveEmbed');
 const Row = require('../../src/Row');
 const SplitButton = require('../../src/SplitButton');
-const TabbedArea = require('../../src/TabbedArea');
+const Tab = require('../../src/Tab');
 const Table = require('../../src/Table');
-const TabPane = require('../../src/TabPane');
+const Tabs = require('../../src/Tabs');
 const Thumbnail = require('../../src/Thumbnail');
 const Tooltip = require('../../src/Tooltip');
 const Well = require('../../src/Well');
@@ -83,8 +90,8 @@ class CodeMirrorEditor extends React.Component {
       return;
     }
 
-    this.editor = CodeMirror.fromTextArea(React.findDOMNode(this.refs.editor), {
-      mode: 'javascript',
+    this.editor = CodeMirror.fromTextArea(this.refs.editor, {
+      mode: 'text/jsx',
       lineNumbers: false,
       lineWrapping: false,
       matchBrackets: true,
@@ -114,12 +121,12 @@ class CodeMirrorEditor extends React.Component {
     if (IS_MOBILE) {
       editor = (
         <CodeExample
-          mode='javascript'
+          mode="javascript"
           codeText={this.props.codeText}
         />
       );
     } else {
-      editor = <textarea ref='editor' defaultValue={this.props.codeText} />;
+      editor = <textarea ref="editor" defaultValue={this.props.codeText} />;
     }
 
     return (
@@ -170,8 +177,8 @@ const ReactPlayground = React.createClass({
     // example element and render it normally. This is safe because it's code
     // that we supply, so we can ensure ahead of time that it won't throw an
     // exception while rendering.
-    const originalReactRender = React.render;
-    React.render = (element) => this._initialExample = element;
+    const originalRender = ReactDOM.render;
+    ReactDOM.render = (element) => this._initialExample = element;
 
     // Stub out mountNode for the example code.
     const mountNode = null;  // eslint-disable-line no-unused-vars
@@ -183,7 +190,7 @@ const ReactPlayground = React.createClass({
       eval(compiledCode);
       /* eslint-enable */
     } finally {
-      React.render = originalReactRender;
+      ReactDOM.render = originalRender;
     }
   },
 
@@ -206,7 +213,7 @@ const ReactPlayground = React.createClass({
 
   render() {
     return (
-      <div className='playground'>
+      <div className="playground">
         {this.renderExample()}
 
         {this.renderEditor()}
@@ -219,7 +226,7 @@ const ReactPlayground = React.createClass({
     let example;
     if (this.state.codeChanged) {
       example = (
-        <div ref='mount' />
+        <div ref="mount" />
       );
     } else {
       example = (
@@ -241,9 +248,9 @@ const ReactPlayground = React.createClass({
 
     return (
       <CodeMirrorEditor
-        key='jsx'
+        key="jsx"
         onChange={this.handleCodeChange}
-        className='highlight'
+        className="highlight"
         codeText={this.state.code}
       />
     );
@@ -261,9 +268,13 @@ const ReactPlayground = React.createClass({
   },
 
   clearExample() {
-    const mountNode = React.findDOMNode(this.refs.mount);
+    if (!this.state.codeChanged) {
+      return null;
+    }
+
+    const mountNode = this.refs.mount;
     try {
-      React.unmountComponentAtNode(mountNode);
+      ReactDOM.unmountComponentAtNode(mountNode);
     } catch (e) {
       console.error(e); // eslint-disable-line no-console
     }
@@ -290,8 +301,8 @@ const ReactPlayground = React.createClass({
 
       this.updateTimeout(
         () => {
-          React.render(
-            <Alert bsStyle='danger'>
+          ReactDOM.render(
+            <Alert bsStyle="danger">
               {err.toString()}
             </Alert>,
             mountNode

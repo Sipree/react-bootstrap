@@ -1,13 +1,12 @@
 import React, { cloneElement } from 'react';
-import BootstrapMixin from './BootstrapMixin';
 import Collapse from './Collapse';
 import classNames from 'classnames';
+import deprecationWarning from './utils/deprecationWarning';
 
 import ValidComponentChildren from './utils/ValidComponentChildren';
 import createChainedFunction from './utils/createChainedFunction';
 
-const CollapsibleNav = React.createClass({
-  mixins: [BootstrapMixin],
+let CollapsibleNav = React.createClass({
 
   propTypes: {
     onSelect: React.PropTypes.func,
@@ -18,6 +17,12 @@ const CollapsibleNav = React.createClass({
     eventKey: React.PropTypes.any
   },
 
+  getDefaultProps() {
+    return {
+      collapsible: false,
+      expanded: false
+    };
+  },
 
   render() {
     /*
@@ -32,15 +37,14 @@ const CollapsibleNav = React.createClass({
       </div>
     );
 
-    if ( this.props.collapsible ){
+    if ( this.props.collapsible ) {
       return (
         <Collapse in={this.props.expanded}>
           { nav }
         </Collapse>
       );
-    } else {
-      return nav;
     }
+    return nav;
   },
 
   getChildActiveProp(child) {
@@ -92,4 +96,7 @@ const CollapsibleNav = React.createClass({
   }
 });
 
-export default CollapsibleNav;
+export default deprecationWarning.wrapper(CollapsibleNav,
+  'CollapsibleNav', 'Navbar.Collapse',
+  'http://react-bootstrap.github.io/components.html#navbars'
+);

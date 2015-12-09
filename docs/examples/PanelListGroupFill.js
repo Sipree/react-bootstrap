@@ -1,5 +1,5 @@
 const panelInstance = (
-  <Panel collapsible defaultExpanded header='Panel heading'>
+  <Panel collapsible defaultExpanded header="Panel heading">
     Some default panel content here.
     <ListGroup fill>
       <ListGroupItem>Item 1</ListGroupItem>
@@ -10,4 +10,4 @@ const panelInstance = (
   </Panel>
 );
 
-React.render(panelInstance, mountNode);
+ReactDOM.render(panelInstance, mountNode);

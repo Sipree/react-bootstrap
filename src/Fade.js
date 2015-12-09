@@ -1,14 +1,19 @@
 import React from 'react';
-import Transition from './Transition';
+import classNames from 'classnames';
+import Transition from 'react-overlays/lib/Transition';
+import deprecated from 'react-prop-types/lib/deprecated';
 
 class Fade extends React.Component {
   render() {
+    let timeout = this.props.timeout || this.props.duration;
+
     return (
       <Transition
         {...this.props}
-        className='fade'
-        enteredClassName='in'
-        enteringClassName='in'
+        timeout={timeout}
+        className={classNames(this.props.className, 'fade')}
+        enteredClassName="in"
+        enteringClassName="in"
       >
         {this.props.children}
       </Transition>
@@ -18,7 +23,6 @@ class Fade extends React.Component {
 
 // Explicitly copied from Transition for doc generation.
 // TODO: Remove duplication once #977 is resolved.
-
 Fade.propTypes = {
   /**
    * Show the component; triggers the fade in or fade out animation
@@ -41,7 +45,13 @@ Fade.propTypes = {
    * callbacks are fired even if the original browser transition end events are
    * canceled
    */
-  duration: React.PropTypes.number,
+  timeout: React.PropTypes.number,
+
+  /**
+   * duration
+   * @private
+   */
+  duration: deprecated(React.PropTypes.number, 'Use `timeout`.'),
 
   /**
    * Callback fired before the component fades in
@@ -71,10 +81,9 @@ Fade.propTypes = {
 
 Fade.defaultProps = {
   in: false,
-  duration: 300,
+  timeout: 300,
   unmountOnExit: false,
   transitionAppear: false
 };
 
 export default Fade;
-
