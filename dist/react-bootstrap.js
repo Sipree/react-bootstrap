@@ -2215,7 +2215,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var types = ['button', 'reset', 'submit'];
 
-	var ButtonStyles = _styleMaps.State.values().concat(_styleMaps.DEFAULT, _styleMaps.PRIMARY, _styleMaps.LINK);
+	var ButtonStyles = _styleMaps.State.values().concat(_styleMaps.DEFAULT, _styleMaps.PRIMARY, _styleMaps.LINK, _styleMaps.INLINE);
 
 	var Button = _react2['default'].createClass({
 	  displayName: 'Button',

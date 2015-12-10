@@ -7,7 +7,7 @@ const types = ['button', 'reset', 'submit'];
 import bootstrapUtils, { bsStyles, bsSizes, bsClass } from './utils/bootstrapUtils';
 import { Sizes, State, DEFAULT, INLINE, PRIMARY, LINK } from './styleMaps';
 
-const ButtonStyles = State.values().concat(DEFAULT, PRIMARY, LINK);
+const ButtonStyles = State.values().concat(DEFAULT, PRIMARY, LINK, INLINE);
 
 let Button = React.createClass({
 
