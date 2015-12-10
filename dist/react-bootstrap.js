@@ -1251,6 +1251,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.State = State;
 	var DEFAULT = 'default';
 	exports.DEFAULT = DEFAULT;
+	var INLINE = 'inline';
+	exports.INLINE = INLINE;
 	var PRIMARY = 'primary';
 	exports.PRIMARY = PRIMARY;
 	var LINK = 'link';

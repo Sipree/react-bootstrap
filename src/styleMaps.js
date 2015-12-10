@@ -38,6 +38,7 @@ export const State = constant({
 });
 
 export const DEFAULT = 'default';
+export const INLINE = 'inline';
 export const PRIMARY = 'primary';
 export const LINK = 'link';
 export const INVERSE = 'inverse';
