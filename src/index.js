@@ -13,6 +13,7 @@ export Col from './Col';
 export CollapsibleNav from './CollapsibleNav';
 export Dropdown from './Dropdown';
 export DropdownButton from './DropdownButton';
+export DropdownMenu from './DropdownMenu';
 export Glyphicon from './Glyphicon';
 export Grid from './Grid';
 export Image from './Image';
