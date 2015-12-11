@@ -8820,7 +8820,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _extends({
 	        className: _classnames2['default'](className, classes),
 	        role: 'menu',
-	        'aria-labelledby': labelledBy
+	        'aria-labelledby': labelledBy,
+	        style: this.props.menuStyle
 	      }, props),
 	      items
 	    );
@@ -9396,6 +9397,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var bsSize = _props.bsSize;
 	    var disabled = _props.disabled;
 	    var className = _props.className;
+	    var menuStyle = _props.menuStyle;
 	    var _props2 = this.props;
 	    var title = _props2.title;
 	    var children = _props2.children;
@@ -9420,7 +9422,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      ),
 	      _react2['default'].createElement(
 	        _Dropdown2['default'].Menu,
-	        null,
+	        { menuStyle: this.props.hasOwnProperty('menuStyle') ? this.props.menuStyle : {} },
 	        children
 	      )
 	    );

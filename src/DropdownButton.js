@@ -7,7 +7,7 @@ import Button from './Button';
 class DropdownButton extends React.Component {
 
   render() {
-    let { bsStyle, bsSize, disabled, className } = this.props;
+    let { bsStyle, bsSize, disabled, className, menuStyle } = this.props;
     let { title, children, ...props } = this.props;
 
     let dropdownProps = pick(props, Object.keys(Dropdown.ControlledComponent.propTypes));
@@ -24,7 +24,7 @@ class DropdownButton extends React.Component {
         >
           {title}
         </Dropdown.Toggle>
-        <Dropdown.Menu>
+        <Dropdown.Menu menuStyle={this.props.hasOwnProperty('menuStyle') ? this.props.menuStyle : {}}>
           {children}
         </Dropdown.Menu>
       </Dropdown>
