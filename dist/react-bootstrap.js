@@ -1259,6 +1259,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.DEFAULT = DEFAULT;
 	var INLINE = 'inline';
 	exports.INLINE = INLINE;
+	var NONE = 'none';
+	exports.NONE = NONE;
 	var PRIMARY = 'primary';
 	exports.PRIMARY = PRIMARY;
 	var LINK = 'link';
@@ -2221,7 +2223,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var types = ['button', 'reset', 'submit'];
 
-	var ButtonStyles = _styleMaps.State.values().concat(_styleMaps.DEFAULT, _styleMaps.PRIMARY, _styleMaps.LINK, _styleMaps.INLINE);
+	var ButtonStyles = _styleMaps.State.values().concat(_styleMaps.DEFAULT, _styleMaps.PRIMARY, _styleMaps.LINK, _styleMaps.INLINE, _styleMaps.NONE);
 
 	var Button = _react2['default'].createClass({
 	  displayName: 'Button',
