@@ -5384,7 +5384,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * If `'menuitem'`, causes the dropdown to behave like a menu item rather than
 	   * a menu button.
 	   */
-	  role: _react2['default'].PropTypes.string
+	  role: _react2['default'].PropTypes.string,
+
+	  /**
+	   * if 'className' is used pass it on as a custome className
+	   */
+	  className: _react2['default'].PropTypes.string
 	};
 
 	Dropdown = _uncontrollable2['default'](Dropdown, { open: 'onToggle' });
@@ -9390,6 +9395,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var bsStyle = _props.bsStyle;
 	    var bsSize = _props.bsSize;
 	    var disabled = _props.disabled;
+	    var className = _props.className;
 	    var _props2 = this.props;
 	    var title = _props2.title;
 	    var children = _props2.children;

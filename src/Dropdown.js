@@ -336,7 +336,13 @@ Dropdown.propTypes = {
    * If `'menuitem'`, causes the dropdown to behave like a menu item rather than
    * a menu button.
    */
-  role: React.PropTypes.string
+  role: React.PropTypes.string,
+
+
+    /**
+     * if 'className' is used pass it on as a custome className
+     */
+  className: React.PropTypes.string
 };
 
 Dropdown = uncontrollable(Dropdown, { open: 'onToggle' });
