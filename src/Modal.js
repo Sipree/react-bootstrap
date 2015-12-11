@@ -228,6 +228,6 @@ Modal.Dialog = ModalDialog;
 Modal.TRANSITION_DURATION = 300;
 Modal.BACKDROP_TRANSITION_DURATION = 150;
 
-export default bsSizes([Sizes.LARGE, Sizes.SMALL],
+export default bsSizes([Sizes.LARGE, Sizes.SMALL, Sizes.MEDIUM],
   bsClass('modal', Modal)
 );

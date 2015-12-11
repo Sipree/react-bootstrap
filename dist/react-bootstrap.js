@@ -10704,7 +10704,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Modal.TRANSITION_DURATION = 300;
 	Modal.BACKDROP_TRANSITION_DURATION = 150;
 
-	exports['default'] = _utilsBootstrapUtils.bsSizes([_styleMaps.Sizes.LARGE, _styleMaps.Sizes.SMALL], _utilsBootstrapUtils.bsClass('modal', Modal));
+	exports['default'] = _utilsBootstrapUtils.bsSizes([_styleMaps.Sizes.LARGE, _styleMaps.Sizes.SMALL, _styleMaps.Sizes.MEDIUM], _utilsBootstrapUtils.bsClass('modal', Modal));
 	module.exports = exports['default'];
 
 /***/ },
