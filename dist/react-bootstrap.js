@@ -10998,7 +10998,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 
-	exports['default'] = _utilsBootstrapUtils.bsSizes([_styleMaps.Sizes.LARGE, _styleMaps.Sizes.SMALL], _utilsBootstrapUtils.bsClass('modal', ModalDialog));
+	exports['default'] = _utilsBootstrapUtils.bsSizes([_styleMaps.Sizes.LARGE, _styleMaps.Sizes.SMALL, _styleMaps.Sizes.MEDIUM], _utilsBootstrapUtils.bsClass('modal', ModalDialog));
 	module.exports = exports['default'];
 
 /***/ },

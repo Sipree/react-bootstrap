@@ -43,6 +43,6 @@ const ModalDialog = React.createClass({
   }
 });
 
-export default bsSizes([Sizes.LARGE, Sizes.SMALL],
+export default bsSizes([Sizes.LARGE, Sizes.SMALL, Sizes.MEDIUM],
   bsClass('modal', ModalDialog)
 );
