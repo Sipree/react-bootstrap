@@ -33,8 +33,8 @@ const OverlayTrigger = React.createClass({
      * Specify which action or actions trigger Overlay visibility
      */
     trigger: React.PropTypes.oneOfType([
-      React.PropTypes.oneOf(['click', 'hover', 'focus']),
-      React.PropTypes.arrayOf(React.PropTypes.oneOf(['click', 'hover', 'focus']))
+      React.PropTypes.oneOf(['click', 'hover', 'focus', 'manual']),
+      React.PropTypes.arrayOf(React.PropTypes.oneOf(['click', 'hover', 'focus','manual']))
     ]),
 
     /**

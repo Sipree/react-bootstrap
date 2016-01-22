@@ -14467,7 +14467,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	    * Specify which action or actions trigger Overlay visibility
 	    */
-	    trigger: _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.oneOf(['click', 'hover', 'focus']), _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.oneOf(['click', 'hover', 'focus']))]),
+	    trigger: _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.oneOf(['click', 'hover', 'focus', 'manual']), _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.oneOf(['click', 'hover', 'focus', 'manual']))]),
 
 	    /**
 	     * A millisecond delay amount to show and hide the Overlay once triggered
