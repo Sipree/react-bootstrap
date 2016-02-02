@@ -11493,7 +11493,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var dialog = _react2['default'].Children.only(this.props.children);
 
 	    var setMountNode = function setMountNode(ref) {
-	      return _this.mountNode = !ref || ref.getMountNode();
+	      return _this.mountNode = ref && ref.getMountNode();
 	    };
 
 	    var mountModal = show || Transition && !this.state.exited;
