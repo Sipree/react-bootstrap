@@ -83,7 +83,37 @@ const Modal = React.createClass({
      * A callback fired when the header closeButton or non-static backdrop is
      * clicked. Required if either are specified.
      */
-    onHide: React.PropTypes.func
+    onHide: React.PropTypes.func,
+
+    /**
+     * Callback fired before the Modal transitions in
+     */
+    onEnter: React.PropTypes.func,
+
+    /**
+     * Callback fired as the Modal begins to transition in
+     */
+    onEntering: React.PropTypes.func,
+
+    /**
+     * Callback fired after the Modal finishes transitioning in
+     */
+    onEntered: React.PropTypes.func,
+
+    /**
+     * Callback fired right before the Modal transitions out
+     */
+    onExit: React.PropTypes.func,
+
+    /**
+     * Callback fired as the Modal begins to transition out
+     */
+    onExiting: React.PropTypes.func,
+
+    /**
+     * Callback fired after the Modal finishes transitioning out
+     */
+    onExited: React.PropTypes.func
   },
 
   childContextTypes: {
@@ -109,6 +139,10 @@ const Modal = React.createClass({
     return {
       $bs_onModalHide: this.props.onHide
     };
+  },
+
+  componentWillUnmount() {
+    events.off(window, 'resize', this.handleWindowResize);
   },
 
   render() {
