@@ -12294,7 +12294,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	function ariaHidden(show, node) {
-	  if (!node) {
+	// With multiple modals, closing most recent passes node as boolean true, breaking
+	  if (!node || node === true) {
 	    return;
 	  }
 	  if (show) {
