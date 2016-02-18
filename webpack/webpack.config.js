@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from 'lodash-compat';
 import baseConfig, { options } from './base.config';
 
 export default _.extend({}, baseConfig, {
@@ -20,6 +20,14 @@ export default _.extend({}, baseConfig, {
         commonjs2: 'react',
         commonjs: 'react',
         amd: 'react'
+      }
+    },
+    {
+      'react-dom': {
+        root: 'ReactDOM',
+        commonjs2: 'react-dom',
+        commonjs: 'react-dom',
+        amd: 'react-dom'
       }
     }
   ]

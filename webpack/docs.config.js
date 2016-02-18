@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from 'lodash-compat';
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import baseConfig, { options, jsLoader } from './base.config';
@@ -21,6 +21,9 @@ if (options.debug) {
 }
 
 export default _.extend({}, baseConfig, {
+
+  devtool: options.debug ? 'source-map' : null,
+
   entry: {
     bundle: options.debug ? devEntryBundle : entryFile
   },

@@ -1,20 +1,22 @@
 import React from 'react';
 import ReactTestUtils from 'react/lib/ReactTestUtils';
+import ReactDOM from 'react-dom';
+
 import Fade from '../src/Fade';
 
-describe('Fade', function () {
+describe('Fade', () => {
 
   let Component, instance;
 
-  beforeEach(function(){
+  beforeEach(() => {
 
     Component = React.createClass({
-      render(){
+      render() {
         let { children, ...props } = this.props;
 
         return (
           <Fade ref={r => this.fade = r}
-            {...props}
+            {...props} {...this.state}
           >
             <div>
               {children}
@@ -25,7 +27,7 @@ describe('Fade', function () {
     });
   });
 
-  it('Should default to hidden', function () {
+  it('Should default to hidden', () => {
     instance = ReactTestUtils.renderIntoDocument(
       <Component>Panel content</Component>
     );
@@ -43,7 +45,7 @@ describe('Fade', function () {
       instance.fade.props.in === false);
 
     assert.equal(
-      React.findDOMNode(instance).className, 'fade');
+      ReactDOM.findDOMNode(instance).className, 'fade');
 
   });
 
@@ -52,15 +54,15 @@ describe('Fade', function () {
       <Component>Panel content</Component>
     );
 
-    function onEntering(){
-      assert.equal(React.findDOMNode(instance).className, 'fade in');
+    function onEntering() {
+      assert.equal(ReactDOM.findDOMNode(instance).className, 'fade in');
       done();
     }
 
     assert.ok(
       instance.fade.props.in === false);
 
-    instance.setProps({ in: true, onEntering });
+    instance.setState({ in: true, onEntering });
   });
 
   it('Should remove "in" class when exiting', done => {
@@ -68,14 +70,14 @@ describe('Fade', function () {
       <Component in>Panel content</Component>
     );
 
-    function onExiting(){
-      assert.equal(React.findDOMNode(instance).className, 'fade');
+    function onExiting() {
+      assert.equal(ReactDOM.findDOMNode(instance).className, 'fade');
       done();
     }
 
     assert.equal(
-      React.findDOMNode(instance).className, 'fade in');
+      ReactDOM.findDOMNode(instance).className, 'fade in');
 
-    instance.setProps({ in: false, onExiting });
+    instance.setState({ in: false, onExiting });
   });
 });

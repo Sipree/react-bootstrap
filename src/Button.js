@@ -1,11 +1,15 @@
 import React from 'react';
 import classNames from 'classnames';
-import BootstrapMixin from './BootstrapMixin';
-import CustomPropTypes from './utils/CustomPropTypes';
-import ButtonInput from './ButtonInput';
+import elementType from 'react-prop-types/lib/elementType';
 
-const Button = React.createClass({
-  mixins: [BootstrapMixin],
+const types = ['button', 'reset', 'submit'];
+
+import bootstrapUtils, { bsStyles, bsSizes, bsClass } from './utils/bootstrapUtils';
+import { Sizes, State, DEFAULT, INLINE, PRIMARY, LINK, NONE } from './styleMaps';
+
+const ButtonStyles = State.values().concat(DEFAULT, PRIMARY, LINK, INLINE, NONE);
+
+let Button = React.createClass({
 
   propTypes: {
     active: React.PropTypes.bool,
@@ -16,30 +20,36 @@ const Button = React.createClass({
     /**
      * You can use a custom element for this component
      */
-    componentClass: CustomPropTypes.elementType,
+    componentClass: elementType,
     href: React.PropTypes.string,
     target: React.PropTypes.string,
     /**
      * Defines HTML button type Attribute
      * @type {("button"|"reset"|"submit")}
+     * @defaultValue 'button'
      */
-    type: React.PropTypes.oneOf(ButtonInput.types)
+    type: React.PropTypes.oneOf(types)
   },
 
   getDefaultProps() {
     return {
-      bsClass: 'button',
-      bsStyle: 'default'
+      active: false,
+      block: false,
+      disabled: false,
+      navItem: false,
+      navDropdown: false
     };
   },
 
   render() {
-    let classes = this.props.navDropdown ? {} : this.getBsClassSet();
+    let classes = this.props.navDropdown ? {} : bootstrapUtils.getClassSet(this.props);
     let renderFuncName;
+
+    let blockClass = bootstrapUtils.prefix(this.props, 'block');
 
     classes = {
       active: this.props.active,
-      'btn-block': this.props.block,
+      [blockClass]: this.props.block,
       ...classes
     };
 
@@ -54,7 +64,6 @@ const Button = React.createClass({
   },
 
   renderAnchor(classes) {
-
     let Component = this.props.componentClass || 'a';
     let href = this.props.href || '#';
     classes.disabled = this.props.disabled;
@@ -96,4 +105,10 @@ const Button = React.createClass({
   }
 });
 
-export default Button;
+Button.types = types;
+
+export default bsStyles(ButtonStyles, DEFAULT,
+  bsSizes([Sizes.LARGE, Sizes.SMALL, Sizes.XSMALL],
+    bsClass('btn', Button)
+  )
+);

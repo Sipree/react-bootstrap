@@ -1,11 +1,14 @@
 import React from 'react';
 import ReactTestUtils from 'react/lib/ReactTestUtils';
+
+import Button from '../src/Button';
 import Nav from '../src/Nav';
 import NavItem from '../src/NavItem';
-import Button from '../src/Button';
 
-describe('Nav', function () {
-  it('Should set the correct item active', function () {
+import {shouldWarn} from './helpers';
+
+describe('Nav', () => {
+  it('Should set the correct item active', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Nav bsStyle="pills" activeKey={1}>
         <NavItem eventKey={1}>Pill 1 content</NavItem>
@@ -19,7 +22,7 @@ describe('Nav', function () {
     assert.notOk(items[1].props.active);
   });
 
-  it('Should adds style class', function () {
+  it('Should adds style class', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Nav bsStyle="tabs" activeKey={1}>
         <NavItem eventKey={1}>Tab 1 content</NavItem>
@@ -30,7 +33,7 @@ describe('Nav', function () {
     assert.ok(ReactTestUtils.findRenderedDOMComponentWithClass(instance, 'nav-tabs'));
   });
 
-  it('Should adds stacked variation class', function () {
+  it('Should adds stacked variation class', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Nav bsStyle="tabs" stacked activeKey={1}>
         <NavItem eventKey={1}>Tab 1 content</NavItem>
@@ -40,7 +43,7 @@ describe('Nav', function () {
     assert.ok(ReactTestUtils.findRenderedDOMComponentWithClass(instance, 'nav-stacked'));
   });
 
-  it('Should adds variation class', function () {
+  it('Should adds variation class', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Nav bsStyle="tabs" justified activeKey={1}>
         <NavItem eventKey={1}>Tab 1 content</NavItem>
@@ -50,7 +53,7 @@ describe('Nav', function () {
     assert.ok(ReactTestUtils.findRenderedDOMComponentWithClass(instance, 'nav-justified'));
   });
 
-  it('Should add pull-right class', function () {
+  it('Should add pull-right class', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Nav bsStyle="tabs" pullRight activeKey={1}>
         <NavItem eventKey={1}>Tab 1 content</NavItem>
@@ -60,9 +63,9 @@ describe('Nav', function () {
     assert.ok(ReactTestUtils.findRenderedDOMComponentWithClass(instance, 'pull-right'));
   });
 
-  it('Should add navbar-right class', function () {
+  it('Should add navbar-right class', () => {
     let instance = ReactTestUtils.renderIntoDocument(
-          <Nav bsStyle="tabs" right activeKey={1}>
+          <Nav bsStyle="tabs" navbar pullRight activeKey={1}>
             <NavItem key={1}>Tab 1 content</NavItem>
             <NavItem key={2}>Tab 2 content</NavItem>
           </Nav>
@@ -71,7 +74,7 @@ describe('Nav', function () {
     assert.ok(ReactTestUtils.findRenderedDOMComponentWithClass(instance, 'navbar-right'));
   });
 
-  it('Should call on select when item is selected', function (done) {
+  it('Should call on select when item is selected', (done) => {
     function handleSelect(key) {
       assert.equal(key, '2');
       done();
@@ -88,7 +91,7 @@ describe('Nav', function () {
     ReactTestUtils.Simulate.click(items[1]);
   });
 
-  it('Should set the correct item active by href', function () {
+  it('Should set the correct item active by href', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Nav bsStyle="pills" activeHref="#item2">
         <NavItem eventKey={1} href="#item1">Pill 1 content</NavItem>
@@ -102,7 +105,7 @@ describe('Nav', function () {
     assert.notOk(items[0].props.active);
   });
 
-  it('Should set navItem prop on passed in buttons', function () {
+  it('Should set navItem prop on passed in buttons', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Nav bsStyle="pills" activeHref="#item2">
         <Button eventKey={1}>Button 1 content</Button>
@@ -115,72 +118,17 @@ describe('Nav', function () {
     assert.ok(items[0].props.navItem);
   });
 
-  it('Should apply className only to the wrapper nav element', function () {
-    const instance = ReactTestUtils.renderIntoDocument(
-      <Nav bsStyle="tabs" activeKey={1} className="nav-specific">
-        <NavItem key={1}>Tab 1 content</NavItem>
-        <NavItem key={2}>Tab 2 content</NavItem>
-      </Nav>
+  it('Should warn when attempting to use a justified navbar nav', () => {
+    ReactTestUtils.renderIntoDocument(
+      <Nav navbar justified />
     );
 
-    let ulNode = React.findDOMNode(ReactTestUtils.findRenderedDOMComponentWithTag(instance, 'ul'));
-    assert.notInclude(ulNode.className, 'nav-specific');
-
-    let navNode = React.findDOMNode(ReactTestUtils.findRenderedDOMComponentWithTag(instance, 'nav'));
-    assert.include(navNode.className, 'nav-specific');
+    shouldWarn('justified navbar `Nav`s are not supported');
   });
 
-  it('Should apply ulClassName to the inner ul element', function () {
-    const instance = ReactTestUtils.renderIntoDocument(
-      <Nav bsStyle="tabs" activeKey={1} className="nav-specific" ulClassName="ul-specific">
-        <NavItem key={1}>Tab 1 content</NavItem>
-        <NavItem key={2}>Tab 2 content</NavItem>
-      </Nav>
-    );
+  describe('Web Accessibility', () => {
 
-    let ulNode = React.findDOMNode(ReactTestUtils.findRenderedDOMComponentWithTag(instance, 'ul'));
-    assert.include(ulNode.className, 'ul-specific');
-    assert.notInclude(ulNode.className, 'nav-specific');
-
-    let navNode = React.findDOMNode(ReactTestUtils.findRenderedDOMComponentWithTag(instance, 'nav'));
-    assert.notInclude(navNode.className, 'ul-specific');
-    assert.include(navNode.className, 'nav-specific');
-  });
-
-  it('Should apply id to the wrapper nav element', function () {
-    const instance = ReactTestUtils.renderIntoDocument(
-      <Nav bsStyle="tabs" activeKey={1} id="nav-id">
-        <NavItem key={1}>Tab 1 content</NavItem>
-        <NavItem key={2}>Tab 2 content</NavItem>
-      </Nav>
-    );
-
-    let navNode = React.findDOMNode(ReactTestUtils.findRenderedDOMComponentWithTag(instance, 'nav'));
-    assert.equal(navNode.id, 'nav-id');
-
-    let ulNode = React.findDOMNode(ReactTestUtils.findRenderedDOMComponentWithTag(instance, 'ul'));
-    assert.notEqual(ulNode.id, 'nav-id');
-  });
-
-  it('Should apply ulId to the inner ul element', function () {
-    const instance = ReactTestUtils.renderIntoDocument(
-      <Nav bsStyle="tabs" activeKey={1} id="nav-id" ulId="ul-id">
-        <NavItem key={1}>Tab 1 content</NavItem>
-        <NavItem key={2}>Tab 2 content</NavItem>
-      </Nav>
-    );
-
-    let ulNode = React.findDOMNode(ReactTestUtils.findRenderedDOMComponentWithTag(instance, 'ul'));
-    assert.equal(ulNode.id, 'ul-id');
-
-    let navNode = React.findDOMNode(ReactTestUtils.findRenderedDOMComponentWithTag(instance, 'nav'));
-    assert.equal(navNode.id, 'nav-id');
-  });
-
-
-  describe('Web Accessibility', function(){
-
-    it('Should have tablist and tab roles', function () {
+    it('Should have tablist and tab roles', () => {
       let instance = ReactTestUtils.renderIntoDocument(
           <Nav bsStyle="tabs" activeKey={1}>
             <NavItem key={1}>Tab 1 content</NavItem>
@@ -191,8 +139,8 @@ describe('Nav', function () {
       let ul = ReactTestUtils.scryRenderedDOMComponentsWithTag(instance, 'ul')[0];
       let navItem = ReactTestUtils.scryRenderedDOMComponentsWithTag(instance, 'a')[0];
 
-      assert.equal(React.findDOMNode(ul).getAttribute('role'), 'tablist');
-      assert.equal(React.findDOMNode(navItem).getAttribute('role'), 'tab');
+      assert.equal(ul.getAttribute('role'), 'tablist');
+      assert.equal(navItem.getAttribute('role'), 'tab');
     });
   });
 });

@@ -1,6 +1,9 @@
+import css from 'dom-helpers/style';
 import React from 'react';
-import Transition from './Transition';
-import domUtils from './utils/domUtils';
+import classNames from 'classnames';
+import Transition from 'react-overlays/lib/Transition';
+import deprecated from 'react-prop-types/lib/deprecated';
+
 import createChainedFunction from './utils/createChainedFunction';
 
 let capitalize = str => str[0].toUpperCase() + str.substr(1);
@@ -11,23 +14,22 @@ let triggerBrowserReflow = node => node.offsetHeight;
 
 const MARGINS = {
   height: ['marginTop', 'marginBottom'],
-  width:  ['marginLeft', 'marginRight']
+  width: ['marginLeft', 'marginRight']
 };
 
-function getDimensionValue(dimension, elem){
+function getDimensionValue(dimension, elem) {
   let value = elem[`offset${capitalize(dimension)}`];
-  let computedStyles = domUtils.getComputedStyles(elem);
   let margins = MARGINS[dimension];
 
   return (value +
-    parseInt(computedStyles[margins[0]], 10) +
-    parseInt(computedStyles[margins[1]], 10)
+    parseInt(css(elem, margins[0]), 10) +
+    parseInt(css(elem, margins[1]), 10)
   );
 }
 
 class Collapse extends React.Component {
 
-  constructor(props, context){
+  constructor(props, context) {
     super(props, context);
 
     this.onEnterListener = this.handleEnter.bind(this);
@@ -46,14 +48,14 @@ class Collapse extends React.Component {
 
     return (
       <Transition
-        ref='transition'
+        ref="transition"
         {...this.props}
         aria-expanded={this.props.role ? this.props.in : null}
-        className={this._dimension() === 'width' ? 'width' : ''}
-        exitedClassName='collapse'
-        exitingClassName='collapsing'
-        enteredClassName='collapse in'
-        enteringClassName='collapsing'
+        className={classNames(this.props.className, { width: this._dimension() === 'width' })}
+        exitedClassName="collapse"
+        exitingClassName="collapsing"
+        enteredClassName="collapse in"
+        enteringClassName="collapsing"
         onEnter={enter}
         onEntering={entering}
         onEntered={entered}
@@ -67,48 +69,48 @@ class Collapse extends React.Component {
   }
 
   /* -- Expanding -- */
-  handleEnter(elem){
+  handleEnter(elem) {
     let dimension = this._dimension();
     elem.style[dimension] = '0';
   }
 
-  handleEntering(elem){
+  handleEntering(elem) {
     let dimension = this._dimension();
 
     elem.style[dimension] = this._getScrollDimensionValue(elem, dimension);
   }
 
-  handleEntered(elem){
+  handleEntered(elem) {
     let dimension = this._dimension();
     elem.style[dimension] = null;
   }
 
   /* -- Collapsing -- */
-  handleExit(elem){
+  handleExit(elem) {
     let dimension = this._dimension();
 
     elem.style[dimension] = this.props.getDimensionValue(dimension, elem) + 'px';
   }
 
-  handleExiting(elem){
+  handleExiting(elem) {
     let dimension = this._dimension();
 
     triggerBrowserReflow(elem);
     elem.style[dimension] = '0';
   }
 
-  _dimension(){
+  _dimension() {
     return typeof this.props.dimension === 'function'
       ? this.props.dimension()
       : this.props.dimension;
   }
 
-  //for testing
-  _getTransitionInstance(){
+  // for testing
+  _getTransitionInstance() {
     return this.refs.transition;
   }
 
-  _getScrollDimensionValue(elem, dimension){
+  _getScrollDimensionValue(elem, dimension) {
     return elem[`scroll${capitalize(dimension)}`] + 'px';
   }
 }
@@ -138,7 +140,13 @@ Collapse.propTypes = {
    * finishing callbacks are fired even if the original browser transition end
    * events are canceled
    */
-  duration: React.PropTypes.number,
+  timeout: React.PropTypes.number,
+
+  /**
+   * duration
+   * @private
+   */
+  duration: deprecated(React.PropTypes.number, 'Use `timeout`.'),
 
   /**
    * Callback fired before the component expands
@@ -194,7 +202,7 @@ Collapse.propTypes = {
 
 Collapse.defaultProps = {
   in: false,
-  duration: 300,
+  timeout: 300,
   unmountOnExit: false,
   transitionAppear: false,
 

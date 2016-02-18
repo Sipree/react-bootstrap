@@ -1,6 +1,9 @@
-import React from 'react';
 import classNames from 'classnames';
+import React from 'react';
+import ReactDOM from 'react-dom';
+
 import TransitionEvents from './utils/TransitionEvents';
+import tbsUtils from './utils/bootstrapUtils';
 
 const CarouselItem = React.createClass({
   propTypes: {
@@ -21,7 +24,10 @@ const CarouselItem = React.createClass({
 
   getDefaultProps() {
     return {
-      animation: true
+      bsStyle: 'carousel',
+      active: false,
+      animateIn: false,
+      animateOut: false
     };
   },
 
@@ -42,7 +48,7 @@ const CarouselItem = React.createClass({
   componentDidUpdate(prevProps) {
     if (!this.props.active && prevProps.active) {
       TransitionEvents.addEndEventListener(
-        React.findDOMNode(this),
+        ReactDOM.findDOMNode(this),
         this.handleAnimateOutEnd
       );
     }
@@ -84,8 +90,10 @@ const CarouselItem = React.createClass({
   },
 
   renderCaption() {
+    let classes = tbsUtils.prefix(this.props, 'caption');
+
     return (
-      <div className="carousel-caption">
+      <div className={classes}>
         {this.props.caption}
       </div>
     );

@@ -1,10 +1,9 @@
 import React from 'react';
 import classNames from 'classnames';
-import BootstrapMixin from './BootstrapMixin';
-import CustomPropTypes from './utils/CustomPropTypes';
+import tbsUtils from './utils/bootstrapUtils';
+import isRequiredForA11y from 'react-prop-types/lib/isRequiredForA11y';
 
 const Tooltip = React.createClass({
-  mixins: [BootstrapMixin],
 
   propTypes: {
     /**
@@ -12,7 +11,12 @@ const Tooltip = React.createClass({
      * @type {string}
      * @required
      */
-    id: CustomPropTypes.isRequiredForA11y(React.PropTypes.string),
+    id: isRequiredForA11y(
+      React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.number
+      ])
+    ),
 
     /**
      * Sets the direction the Tooltip is positioned towards.
@@ -47,21 +51,21 @@ const Tooltip = React.createClass({
 
   getDefaultProps() {
     return {
+      bsClass: 'tooltip',
       placement: 'right'
     };
   },
 
   render() {
     const classes = {
-      'tooltip': true,
+      [tbsUtils.prefix(this.props)]: true,
       [this.props.placement]: true
     };
 
     const style = {
       'left': this.props.positionLeft,
       'top': this.props.positionTop,
-      // we don't want to expose the `style` property
-      ...this.props.style // eslint-disable-line react/prop-types
+      ...this.props.style
     };
 
     const arrowStyle = {
@@ -70,13 +74,13 @@ const Tooltip = React.createClass({
     };
 
     return (
-        <div role='tooltip' {...this.props} className={classNames(this.props.className, classes)} style={style}>
-          <div className="tooltip-arrow" style={arrowStyle} />
-          <div className="tooltip-inner">
-            {this.props.children}
-          </div>
+      <div role="tooltip" {...this.props} className={classNames(this.props.className, classes)} style={style}>
+        <div className={tbsUtils.prefix(this.props, 'arrow')} style={arrowStyle} />
+        <div className={tbsUtils.prefix(this.props, 'inner')}>
+          {this.props.children}
         </div>
-      );
+      </div>
+    );
   }
 });
 

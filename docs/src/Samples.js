@@ -1,9 +1,10 @@
-/* eslint no-path-concat: 0, no-var: 0 */
+/* eslint no-path-concat: 0, no-var: 0, key-spacing: 0 */
 
 export default {
   Collapse:                      require('fs').readFileSync(__dirname + '/../examples/Collapse.js', 'utf8'),
   Fade:                          require('fs').readFileSync(__dirname + '/../examples/Fade.js', 'utf8'),
 
+  Breadcrumb:                    require('fs').readFileSync(__dirname + '/../examples/Breadcrumb.js', 'utf8'),
   ButtonTypes:                   require('fs').readFileSync(__dirname + '/../examples/ButtonTypes.js', 'utf8'),
   ButtonSizes:                   require('fs').readFileSync(__dirname + '/../examples/ButtonSizes.js', 'utf8'),
   ButtonBlock:                   require('fs').readFileSync(__dirname + '/../examples/ButtonBlock.js', 'utf8'),
@@ -19,6 +20,8 @@ export default {
   ButtonGroupJustified:          require('fs').readFileSync(__dirname + '/../examples/ButtonGroupJustified.js', 'utf8'),
   ButtonGroupBlock:              require('fs').readFileSync(__dirname + '/../examples/ButtonGroupBlock.js', 'utf8'),
   DropdownButtonBasic:           require('fs').readFileSync(__dirname + '/../examples/DropdownButtonBasic.js', 'utf8'),
+  DropdownButtonCustom:          require('fs').readFileSync(__dirname + '/../examples/DropdownButtonCustom.js', 'utf8'),
+  DropdownButtonCustomMenu:      require('fs').readFileSync(__dirname + '/../examples/DropdownButtonCustomMenu.js', 'utf8'),
   SplitButtonBasic:              require('fs').readFileSync(__dirname + '/../examples/SplitButtonBasic.js', 'utf8'),
   DropdownButtonSizes:           require('fs').readFileSync(__dirname + '/../examples/DropdownButtonSizes.js', 'utf8'),
   DropdownButtonNoCaret:         require('fs').readFileSync(__dirname + '/../examples/DropdownButtonNoCaret.js', 'utf8'),
@@ -58,12 +61,13 @@ export default {
   NavStacked:                    require('fs').readFileSync(__dirname + '/../examples/NavStacked.js', 'utf8'),
   NavJustified:                  require('fs').readFileSync(__dirname + '/../examples/NavJustified.js', 'utf8'),
   NavbarBasic:                   require('fs').readFileSync(__dirname + '/../examples/NavbarBasic.js', 'utf8'),
-  NavbarBrand:                   require('fs').readFileSync(__dirname + '/../examples/NavbarBrand.js', 'utf8'),
   NavbarCollapsible:             require('fs').readFileSync(__dirname + '/../examples/NavbarCollapsible.js', 'utf8'),
-  CollapsibleNav:                require('fs').readFileSync(__dirname + '/../examples/CollapsibleNav.js', 'utf8'),
-  TabbedAreaUncontrolled:        require('fs').readFileSync(__dirname + '/../examples/TabbedAreaUncontrolled.js', 'utf8'),
-  TabbedAreaControlled:          require('fs').readFileSync(__dirname + '/../examples/TabbedAreaControlled.js', 'utf8'),
-  TabbedAreaNoAnimation:         require('fs').readFileSync(__dirname + '/../examples/TabbedAreaNoAnimation.js', 'utf8'),
+  NavbarForm:                    require('fs').readFileSync(__dirname + '/../examples/NavbarForm.js', 'utf8'),
+  NavbarTextLink:                require('fs').readFileSync(__dirname + '/../examples/NavbarTextLink.js', 'utf8'),
+  TabsUncontrolled:              require('fs').readFileSync(__dirname + '/../examples/TabsUncontrolled.js', 'utf8'),
+  TabsControlled:                require('fs').readFileSync(__dirname + '/../examples/TabsControlled.js', 'utf8'),
+  TabsNoAnimation:               require('fs').readFileSync(__dirname + '/../examples/TabsNoAnimation.js', 'utf8'),
+  LeftTabs:                      require('fs').readFileSync(__dirname + '/../examples/LeftTabs.js', 'utf8'),
   PagerDefault:                  require('fs').readFileSync(__dirname + '/../examples/PagerDefault.js', 'utf8'),
   PagerAligned:                  require('fs').readFileSync(__dirname + '/../examples/PagerAligned.js', 'utf8'),
   PagerDisabled:                 require('fs').readFileSync(__dirname + '/../examples/PagerDisabled.js', 'utf8'),
@@ -77,6 +81,7 @@ export default {
   GridBasic:                     require('fs').readFileSync(__dirname + '/../examples/GridBasic.js', 'utf8'),
   ThumbnailAnchor:               require('fs').readFileSync(__dirname + '/../examples/ThumbnailAnchor.js', 'utf8'),
   ThumbnailDiv:                  require('fs').readFileSync(__dirname + '/../examples/ThumbnailDiv.js', 'utf8'),
+  ListGroupCustom:               require('fs').readFileSync(__dirname + '/../examples/ListGroupCustom.js', 'utf8'),
   ListGroupDefault:              require('fs').readFileSync(__dirname + '/../examples/ListGroupDefault.js', 'utf8'),
   ListGroupLinked:               require('fs').readFileSync(__dirname + '/../examples/ListGroupLinked.js', 'utf8'),
   ListGroupActive:               require('fs').readFileSync(__dirname + '/../examples/ListGroupActive.js', 'utf8'),
@@ -102,6 +107,9 @@ export default {
   InputHorizontal:               require('fs').readFileSync(__dirname + '/../examples/InputHorizontal.js', 'utf8'),
   InputWrapper:                  require('fs').readFileSync(__dirname + '/../examples/InputWrapper.js', 'utf8'),
   MenuItem:                      require('fs').readFileSync(__dirname + '/../examples/MenuItem.js', 'utf8'),
+  ImageResponsive:               require('fs').readFileSync(__dirname + '/../examples/ImageResponsive.js', 'utf8'),
+  ImageShape:                    require('fs').readFileSync(__dirname + '/../examples/ImageShape.js', 'utf8'),
+  ResponsiveEmbed:               require('fs').readFileSync(__dirname + '/../examples/ResponsiveEmbed.js', 'utf8'),
 
   Overlay:                       require('fs').readFileSync(__dirname + '/../examples/Overlay.js', 'utf8'),
   OverlayCustom:                 require('fs').readFileSync(__dirname + '/../examples/OverlayCustom.js', 'utf8')

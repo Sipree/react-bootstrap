@@ -1,19 +1,23 @@
 import React from 'react';
 import classNames from 'classnames';
-import BootstrapMixin from './BootstrapMixin';
-import CustomPropTypes from './utils/CustomPropTypes';
+import tbsUtils from './utils/bootstrapUtils';
+import isRequiredForA11y from 'react-prop-types/lib/isRequiredForA11y';
 
 const Popover = React.createClass({
 
-  mixins: [ BootstrapMixin ],
-
   propTypes: {
+
     /**
      * An html id attribute, necessary for accessibility
      * @type {string}
      * @required
      */
-    id: CustomPropTypes.isRequiredForA11y(React.PropTypes.string),
+    id: isRequiredForA11y(
+      React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.number
+      ])
+    ),
 
     /**
      * Sets the direction the Popover is positioned towards.
@@ -48,20 +52,23 @@ const Popover = React.createClass({
 
   getDefaultProps() {
     return {
-      placement: 'right'
+      placement: 'right',
+      bsClass: 'popover'
     };
   },
 
   render() {
     const classes = {
-      'popover': true,
+      [tbsUtils.prefix(this.props)]: true,
       [this.props.placement]: true
     };
 
     const style = {
       'left': this.props.positionLeft,
       'top': this.props.positionTop,
-      'display': 'block'
+      'display': 'block',
+      // we don't want to expose the `style` property
+      ...this.props.style // eslint-disable-line react/prop-types
     };
 
     const arrowStyle = {
@@ -70,10 +77,10 @@ const Popover = React.createClass({
     };
 
     return (
-      <div role='tooltip' {...this.props} className={classNames(this.props.className, classes)} style={style} title={null}>
+      <div role="tooltip" {...this.props} className={classNames(this.props.className, classes)} style={style} title={null}>
         <div className="arrow" style={arrowStyle} />
         {this.props.title ? this.renderTitle() : null}
-        <div className="popover-content">
+        <div className={tbsUtils.prefix(this.props, 'content')}>
           {this.props.children}
         </div>
       </div>
@@ -82,7 +89,9 @@ const Popover = React.createClass({
 
   renderTitle() {
     return (
-      <h3 className="popover-title">{this.props.title}</h3>
+      <h3 className={tbsUtils.prefix(this.props, 'title')}>
+        {this.props.title}
+      </h3>
     );
   }
 });
